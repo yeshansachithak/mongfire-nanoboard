@@ -5,12 +5,14 @@ export interface MongFireDashboardProps {
     mode: 'mongodb' | 'firestore';
     mongoApiUrl?: string;
     firestore?: any; // Firestore instance (for mode === 'firestore')
+    collectionNames?: string[]; // Optional override for Firestore
 }
 
 export const MongFireDashboard = ({
     mode,
     mongoApiUrl = 'http://localhost:4000/api',
     firestore,
+    collectionNames = [],
 }: MongFireDashboardProps) => {
     const [collections, setCollections] = useState<string[]>([]);
     const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
@@ -20,13 +22,22 @@ export const MongFireDashboard = ({
         if (mode === 'mongodb') {
             fetch(`${mongoApiUrl}/collections`)
                 .then((res) => res.json())
-                .then(setCollections);
-        } else if (mode === 'firestore' && firestore) {
-            firestore.listCollections().then((colls: any[]) => {
-                setCollections(colls.map((c) => c.id));
-            });
+                .then(setCollections)
+                .catch((err) => console.error('MongoDB collections fetch failed', err));
+        } else if (mode === 'firestore') {
+            if (collectionNames.length > 0) {
+                setCollections(collectionNames);
+            } else if (firestore?.listCollections) {
+                firestore.listCollections().then((colls: any[]) => {
+                    setCollections(colls.map((c) => c.id));
+                });
+            } else {
+                console.warn(
+                    'Firestore listCollections is not available. Pass collectionNames prop manually.'
+                );
+            }
         }
-    }, [mode]);
+    }, [mode, firestore, collectionNames]);
 
     useEffect(() => {
         if (!selectedCollection) return;
