@@ -1,5 +1,6 @@
 // packages/mongfire-nano-board/client/MongFireDashboard.tsx
 import { useEffect, useState } from 'react';
+import { getDocs, collection as getCollection, Firestore, QuerySnapshot, DocumentData } from 'firebase/firestore';
 
 export interface MongFireDashboardProps {
     mode: 'mongodb' | 'firestore';
@@ -28,13 +29,12 @@ export const MongFireDashboard = ({
             if (collectionNames.length > 0) {
                 setCollections(collectionNames);
             } else if (firestore?.listCollections) {
+                // Legacy compat
                 firestore.listCollections().then((colls: any[]) => {
-                    setCollections(colls.map((c) => c.id));
+                    setCollections(colls.map((c: any) => c.id));
                 });
             } else {
-                console.warn(
-                    'Firestore listCollections is not available. Pass collectionNames prop manually.'
-                );
+                console.warn('Pass collectionNames[] if using Firestore modular SDK');
             }
         }
     }, [mode, firestore, collectionNames]);
@@ -47,13 +47,12 @@ export const MongFireDashboard = ({
                 .then((res) => res.json())
                 .then(setDocuments);
         } else if (mode === 'firestore' && firestore) {
-            firestore
-                .collection(selectedCollection)
-                .get()
-                .then((snap: any) => {
-                    const docs = snap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
-                    setDocuments(docs);
-                });
+            // Use modular SDK
+            const ref = getCollection(firestore, selectedCollection);
+            getDocs(ref).then((snap) => {
+                const docs = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+                setDocuments(docs);
+            });
         }
     }, [selectedCollection]);
 
