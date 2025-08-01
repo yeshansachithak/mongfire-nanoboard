@@ -1,19 +1,40 @@
 {
   "name": "mongfire-nano-board",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
+  "description": "A plug-and-play React dashboard for managing Firestore and MongoDB collections",
+  "main": "client/index.tsx",
+  "types": "client/index.tsx",
   "exports": {
     ".": {
       "import": "./client/index.tsx"
     },
     "./server": "./server/index.ts"
   },
+  "files": [
+    "client",
+    "server"
+  ],
   "scripts": {
     "build:client": "tsc --build client",
     "build:server": "tsc --build server",
     "dev:server": "ts-node-dev server/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mongodb",
+    "firestore",
+    "react",
+    "admin dashboard",
+    "firebase",
+    "mongo",
+    "tailwind",
+    "developer-tools"
+  ],
+  "author": "Yeshan Perera",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -28,9 +49,5 @@
     "@types/react-dom": "^19.1.7",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
-  },
-  "keywords": [],
-  "author": "Yeshan Perera",
-  "license": "ISC",
-  "packageManager": "pnpm@10.14.0"
+  }
 }
