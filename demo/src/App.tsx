@@ -33,7 +33,11 @@ function App() {
       <div>
         <MongFireDashboard mode="mongodb" mongoApiUrl="http://localhost:4000/api" />
         {/* or for Firestore use below */}
-        {/* <MongFireDashboard mode="firestore" firestore={yourFirestoreInstance} /> */}
+        {/* <MongFireDashboard
+          mode="firestore"
+          firestore={db}
+          collectionNames={['users', 'surveys']}
+        /> */}
       </div>
     </>
   )

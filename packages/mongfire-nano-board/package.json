@@ -1,6 +1,6 @@
 {
   "name": "mongfire-nano-board",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A plug-and-play React dashboard for managing Firestore and MongoDB collections",
   "main": "client/index.tsx",
   "types": "client/index.tsx",
